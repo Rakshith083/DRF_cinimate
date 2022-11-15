@@ -1,6 +1,5 @@
 from django.db import models
 from cinimateApp.models.comman.baseModel import BaseModel
-from cinimateApp.models.comman.softdelete import SoftDeleteModel
 from softdelete.models import SoftDeleteObject
 from cinimateApp.models.watchlist import WatchList
 from django.core.validators import MaxValueValidator, MinValueValidator
