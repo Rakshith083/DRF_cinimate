@@ -2,7 +2,7 @@ from django.db import models
 from cinimateApp.models.comman.baseModel import BaseModel
 from cinimateApp.models.comman.softdelete import SoftDeleteModel
 from cinimateApp.models.streamPlatform import StreamPlatform
-
+from softdelete.models import SoftDeleteObject
 # Create your models here.
 
 class WatchList(BaseModel,SoftDeleteModel):

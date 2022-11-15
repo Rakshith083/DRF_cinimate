@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.contenttypes',
+    'softdelete',
     'rest_framework',
     'cinimateApp',
 ]
@@ -66,6 +68,10 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            'loaders': (
+                  'django.template.loaders.filesystem.Loader',
+                  'django.template.loaders.app_directories.Loader',
+              ),
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',

@@ -2,12 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from cinimateApp.models.streamPlatform import StreamPlatform
 from cinimateApp.serializers.straemPlatformSerializer import StreamPlatformSerializer
+from rest_framework import viewsets 
 
 # Create your views here.
 class StreeaPlatformListAV(APIView):
-
     def get(self,request):
         platforms=StreamPlatform.objects.all().filter(is_deleted=False)
         serializer=StreamPlatformSerializer(platforms,many=True,)
@@ -62,3 +63,17 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except StreamPlatform.DoesNotExist:
             return Response({'Error':'Not found'},status=status.HTTP_404_NOT_FOUND)
+
+class StreamPlatformVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.filter(is_deleted=False,watchlist__is_deleted=False)
+    serializer_class = StreamPlatformSerializer
+    # def list(self, request):
+    #     queryset = StreamPlatform.objects.all()
+    #     serializer = StreamPlatformSerializer(queryset, many=True)
+    #     return Response(serializer.data)
+
+    # def retrieve(self, request, pk=None):
+    #     queryset = StreamPlatform.objects.all()
+    #     user = get_object_or_404(queryset, pk=pk)
+    #     serializer = StreamPlatformSerializer(user)
+    #     return Response(serializer.data)

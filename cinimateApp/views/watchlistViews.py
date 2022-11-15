@@ -9,7 +9,7 @@ from cinimateApp.serializers.WatchlistSerializer import WatchlistSerializer
 class WatchlistAV(APIView):
 
     def get(self,request):
-        watchlist=WatchList.objects.all().filter(is_deleted=False)
+        watchlist=WatchList.objects.all().filter(is_deleted=False,platform__is_deleted=False)
         serializer=WatchlistSerializer(watchlist,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 

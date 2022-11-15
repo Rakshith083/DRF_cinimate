@@ -13,15 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path,include
 # from cinimateApp import views as movieViews
-from .views.streamPlatformViews import StreeaPlatformListAV,StreamPlatformAV
+from .views.streamPlatformViews import StreeaPlatformListAV,StreamPlatformAV,StreamPlatformVS
 from .views.watchlistViews import WatchlistAV,WatchlistDetailsAV
+from .views.reviewViews import ReviewList,ReviewDetails,ReviewCreate
+from rest_framework.routers import DefaultRouter
+
+router=DefaultRouter()
+router.register(r'/streams', StreamPlatformVS,basename='straemPlatform')
+
 urlpatterns = [
     # path('/',movieViews.MovieList.as_view()),
     # path('/<int:id>',movieViews.MovieDetailsAV.as_view()),
     path ('/watchlists',WatchlistAV.as_view(), name='watchlist-list'),
     path ('/watchlists/<int:id>',WatchlistDetailsAV.as_view(),name='watchlist-detail'),
-    path ('/streams',StreeaPlatformListAV.as_view()),
-    path ('/streams/<int:id>',StreamPlatformAV.as_view()),
+    path ('/watchlists/<int:id>/reviews',ReviewList.as_view(),name='watchlist-review'),
+    path ('/watchlists/<int:id>/reviews-create',ReviewCreate.as_view(),name='watchlist-review-create'),
+    # path ('/streams',StreeaPlatformListAV.as_view()),
+    # path ('/streams/<int:id>',StreamPlatformAV.as_view()),
+    path('',include(router.urls)),
+    path('/reviews/<int:pk>',ReviewDetails.as_view(),name='review-details'),
 ]
