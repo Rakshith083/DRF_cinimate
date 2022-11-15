@@ -5,7 +5,7 @@ from cinimateApp.models.streamPlatform import StreamPlatform
 from softdelete.models import SoftDeleteObject
 # Create your models here.
 
-class WatchList(BaseModel,SoftDeleteModel):
+class WatchList(BaseModel,SoftDeleteObject):
     title=models.CharField(max_length=250)
     storyline=models.CharField(max_length=250)
     active=models.BooleanField(default=False)

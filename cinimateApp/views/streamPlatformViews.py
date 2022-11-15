@@ -10,7 +10,7 @@ from rest_framework import viewsets
 # Create your views here.
 class StreeaPlatformListAV(APIView):
     def get(self,request):
-        platforms=StreamPlatform.objects.all().filter(is_deleted=False)
+        platforms=StreamPlatform.objects.all()
         serializer=StreamPlatformSerializer(platforms,many=True,)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -28,7 +28,7 @@ class StreeaPlatformListAV(APIView):
 class StreamPlatformAV(APIView):
     def get(self,request,id):
         try:
-            platform=StreamPlatform.objects.filter(is_deleted=False).get(pk=id)
+            platform=StreamPlatform.objects.get(pk=id)
             serializer=StreamPlatformSerializer(platform)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except StreamPlatform.DoesNotExist:
@@ -36,7 +36,7 @@ class StreamPlatformAV(APIView):
 
     def put(self,request,id):
         try:
-            platform=StreamPlatform.objects.filter(is_deleted=False).get(pk=id)
+            platform=StreamPlatform.objects.get(pk=id)
             serializer=StreamPlatformSerializer(platform,data=request.data)
             if(serializer.is_valid()):
                 serializer.save()
@@ -47,7 +47,7 @@ class StreamPlatformAV(APIView):
 
     def delete(self,request,id):
         try:
-            platform=StreamPlatform.objects.filter(is_deleted=False).get(pk=id)
+            platform=StreamPlatform.objects.get(pk=id)
             platform.delete()
             return Response({'message' : 'Content deleted successfully'},status=status.HTTP_204_NO_CONTENT)
         except StreamPlatform.DoesNotExist:
@@ -65,7 +65,7 @@ class StreamPlatformAV(APIView):
             return Response({'Error':'Not found'},status=status.HTTP_404_NOT_FOUND)
 
 class StreamPlatformVS(viewsets.ModelViewSet):
-    queryset = StreamPlatform.objects.filter(is_deleted=False,watchlist__is_deleted=False)
+    queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     # def list(self, request):
     #     queryset = StreamPlatform.objects.all()

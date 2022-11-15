@@ -9,7 +9,7 @@ from cinimateApp.serializers.WatchlistSerializer import WatchlistSerializer
 class WatchlistAV(APIView):
 
     def get(self,request):
-        watchlist=WatchList.objects.all().filter(is_deleted=False,platform__is_deleted=False)
+        watchlist=WatchList.objects.all()
         serializer=WatchlistSerializer(watchlist,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -27,7 +27,7 @@ class WatchlistAV(APIView):
 class WatchlistDetailsAV(APIView):
     def get(self,request,id):
         try:
-            watchlist=WatchList.objects.filter(is_deleted=False).get(pk=id)
+            watchlist=WatchList.objects.get(pk=id)
             serializer=WatchlistSerializer(watchlist)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except WatchList.DoesNotExist:
@@ -35,7 +35,7 @@ class WatchlistDetailsAV(APIView):
 
     def put(self,request,id):
         try:
-            watchlist=WatchList.objects.filter(is_deleted=False).get(pk=id)
+            watchlist=WatchList.objects.get(pk=id)
             serializer=WatchlistSerializer(watchlist,data=request.data)
             if(serializer.is_valid()):
                 serializer.save()
@@ -46,7 +46,7 @@ class WatchlistDetailsAV(APIView):
 
     def delete(self,request,id):
         try:
-            watchlist=WatchList.objects.filter(is_deleted=False).get(pk=id)
+            watchlist=WatchList.objects.get(pk=id)
             watchlist.delete()
             return Response({'message' : 'Content deleted successfully'},status=status.HTTP_204_NO_CONTENT)
         except WatchList.DoesNotExist:

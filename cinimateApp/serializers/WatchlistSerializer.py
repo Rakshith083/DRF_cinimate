@@ -13,7 +13,8 @@ class WatchlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchList
         # fields = ["id","title","storyline","active","platform","platformName","reviews","created_at","updated_at",]
-        exclude=['is_deleted',] 
+        # fields='__all__'
+        exclude=['deleted_at']
         read_only_fields = ['id']
 
     #custome serializer field

@@ -31,14 +31,14 @@ from rest_framework.generics import (GenericAPIView,CreateAPIView,
 #         return self.destroy(request, *args, **kwargs)
 
 class ReviewList(ListAPIView):
-    # queryset = Review.objects.filter(is_deleted=False)
+    # queryset = Review.objects.filter()
     serializer_class = ReviewSerializer
     def get_queryset(self):
         watchlistId = self.kwargs['id']
-        return Review.objects.filter(is_deleted=False,watchlist=watchlistId,watchlist__is_deleted=False)
+        return Review.objects.filter(watchlist=watchlistId)
 
 class ReviewDetails(RetrieveUpdateDestroyAPIView):
-    queryset = Review.objects.filter(is_deleted=False)
+    queryset = Review.objects.filter()
     serializer_class = ReviewSerializer
 
 class ReviewCreate(CreateAPIView):
@@ -46,6 +46,6 @@ class ReviewCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         watchlistId = self.kwargs.get('id')
-        movie=WatchList.objects.get(is_deleted=False,id=watchlistId)
+        movie=WatchList.objects.get(id=watchlistId)
         serializer.save(watchlist=movie)
 

@@ -10,6 +10,5 @@ class StreamPlatformSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = StreamPlatform
-        fields = ['id','name','about','website','created_at','updated_at','watchlist'] 
-        # exclude=['is_deleted']
+        exclude=['deleted_at']
         read_only_fields = ['id']
