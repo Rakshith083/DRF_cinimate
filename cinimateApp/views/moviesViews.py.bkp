@@ -1,0 +1,66 @@
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from cinimateApp.serializers.movieSerializer import MovieSerializer
+from cinimateApp.models.movies import Movies
+
+# Create your views here.
+
+class MovieList(APIView):
+
+    def get(self,request):
+        movies=Movies.objects.all().filter(is_deleted=False)
+        serializer=MovieSerializer(movies,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def post(self,request):
+        if(isinstance(request.data,list)):
+            serialiser=MovieSerializer(data=request.data,many=True)
+        else:
+            serialiser=MovieSerializer(data=request.data)
+        if(serialiser.is_valid()):
+            serialiser.save()
+            return Response(serialiser.data,status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialiser.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class MovieDetailsAV(APIView):
+    def get(self,request,id):
+        try:
+            movie=Movies.objects.filter(is_deleted=False).get(pk=id)
+            serializer=MovieSerializer(movie)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except Movies.DoesNotExist:
+            return Response({'Error':'Movie not found'},status=status.HTTP_404_NOT_FOUND)
+
+    def put(self,request,id):
+        try:
+            movie=Movies.objects.filter(is_deleted=False).get(pk=id)
+            serializer=MovieSerializer(movie,data=request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Movies.DoesNotExist:
+            return Response({'Error':'Movie not found'},status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request,id):
+        try:
+            movie=Movies.objects.filter(is_deleted=False).get(pk=id)
+            movie.delete()
+            return Response({'message' : 'Content deleted successfully'},status=status.HTTP_204_NO_CONTENT)
+        except Movies.DoesNotExist:
+            return Response({'Error':'Movie not found'},status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self,request,id):
+        try:
+            movie=Movies.objects.get(pk=id)
+            serializer=MovieSerializer(movie,data=request.data,partial=True)
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Movies.DoesNotExist:
+            return Response({'Error':'Movie not found'},status=status.HTTP_404_NOT_FOUND)
+

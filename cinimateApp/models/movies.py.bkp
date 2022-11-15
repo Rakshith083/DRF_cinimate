@@ -1,0 +1,13 @@
+from django.db import models
+from cinimateApp.models.comman.baseModel import BaseModel
+from cinimateApp.models.comman.softdelete import SoftDeleteModel
+
+# Create your models here.
+
+class Movies(BaseModel,SoftDeleteModel):
+    name=models.CharField(max_length=250)
+    description=models.CharField(max_length=250)
+    active=models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name

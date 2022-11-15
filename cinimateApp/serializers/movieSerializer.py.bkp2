@@ -1,0 +1,32 @@
+#Model Serializer
+
+from rest_framework import serializers
+
+from cinimateApp.models.movies import Movies
+
+class MovieSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movies
+        fields = '__all__' 
+        # fields=['id', 'name', 'description', 'active']
+        # exclude=['name']
+        read_only_fields = ['id']
+    
+    # field Level Validation
+    def validate_name(self,value):
+        if(len(value)<3):
+            raise serializers.ValidationError('name is too short')
+        return value
+
+    #Objectlevel validation
+    # def validate(self,data):
+    #     if(data['name']==data['description']):
+    #         raise serializers.ValidationError('name and description should be different')
+    #     return data
+
+    #custome serializer field
+    # name_length=serializers.SerializerMethodField()
+    # def get_name_length(self,object):
+    #     return len(object.name)
+    
